@@ -27,7 +27,7 @@ void themSinhVien(SinhVien a[], int *n);
 void inTieuDe();
 void inDS(SinhVien a[], int n);
 void gpaMax(SinhVien a[], int n);
-void sapXep(SinhVien a[], int n);~
+void sapXep(SinhVien a[], int n);
 void xoaSinhVien(SinhVien a[], int *n);
 void timTen(SinhVien a[], int n);
 void timMa(SinhVien a[], int n);
