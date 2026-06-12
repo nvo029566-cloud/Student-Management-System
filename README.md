@@ -1,127 +1,167 @@
-# 📚 Quản Lý Sinh Viên (Student Management System)
+# 📚 Student Management System — C Language
 
-Chương trình quản lý thông tin sinh viên viết bằng ngôn ngữ C, chạy trên nền console với giao diện menu tương tác.
+[![Language](https://img.shields.io/badge/language-C-blue.svg)](https://en.wikipedia.org/wiki/C_(programming_language))
+[![Platform](https://img.shields.io/badge/platform-Windows-lightgrey.svg)](#)
+[![License](https://img.shields.io/badge/license-MIT-green.svg)](#-license)
+
+A console-based **Student Management System** written in **C**, featuring an interactive menu for managing student records — including data entry, search, sorting, editing, and persistent file storage. The project follows a **modular architecture**, with each group of features organized into its own source file.
 
 ---
 
-## 📁 Cấu trúc thư mục
+## 📑 Table of Contents
+
+- [Features](#-features)
+- [Project Structure](#-project-structure)
+- [Data Structure](#️-data-structure)
+- [System Requirements](#️-system-requirements)
+- [Installation & Build](#-installation--build)
+- [Usage Guide](#-usage-guide)
+- [Storage File Format](#-storage-file-format)
+- [Program Flow Diagram](#-program-flow-diagram)
+- [Notes & Limitations](#️-notes--limitations)
+- [Roadmap](#-roadmap)
+- [Author](#-author)
+- [License](#-license)
+
+---
+
+## ✨ Features
+
+| Option | Function | Description |
+|:---:|---|---|
+| 1 | Input student list | Enter `N` students consecutively |
+| 2 | Display student list | Print a table of all students |
+| 3 | Find highest GPA | Display the student with the highest GPA |
+| 4 | Sort | Sort students by GPA in ascending order (Bubble Sort) |
+| 5 | Add student | Append a new student to the end of the list |
+| 6 | Delete by index | Remove a student by their displayed index number |
+| 7 | Search by name | Search for a student by full name |
+| 8 | Search by student ID | Search for a student by ID |
+| 9 | Delete by student ID | Remove a student by ID |
+| 10 | Edit student info | Update all fields of a student by ID |
+| 11 | Save to file | Write the list to `SinhVien.txt` |
+| 12 | Load from file | Load the list from `SinhVien.txt` |
+| **0** | **Exit** | **End the program** |
+
+---
+
+## 📁 Project Structure
 
 ```
 project/
-├── main.c          # Hàm main, vòng lặp menu chính
-├── sinhvien.h      # Header file: định nghĩa struct & khai báo hàm
-├── nhap_in.c       # Các hàm nhập liệu, hiển thị, tìm kiếm, xóa, sửa
-├── sapxep.c        # Các hàm sắp xếp và tìm GPA cao nhất
-└── file.c          # Các hàm đọc/ghi file
+├── main.c          # Main function and main menu loop
+├── sinhvien.h      # Header file: struct definitions & function declarations
+├── nhap_in.c       # Input, display, search, delete, and edit functions
+├── sapxep.c        # Sorting functions and highest-GPA lookup
+└── file.c          # File read/write functions
 ```
+
+> 💡 Each module is split into its own `.c` file with shared declarations centralized in `sinhvien.h`, keeping the codebase organized and easy to extend — a good practice for modular C programming.
 
 ---
 
-## 🗂️ Cấu trúc dữ liệu
+## 🗂️ Data Structure
 
 ```c
 typedef struct {
-    int ngay, thang, nam;
+    int ngay, thang, nam;   // day, month, year
 } Date;
 
 typedef struct {
-    char ten[100];      // Họ và tên
-    char lop[100];      // Lớp
-    char maSV[20];      // Mã sinh viên
-    char gt[10];        // Giới tính
-    Date ns;            // Ngày sinh
-    double gpa;         // Điểm GPA (0.0 – 4.0)
+    char ten[100];      // Full name
+    char lop[100];      // Class
+    char maSV[20];       // Student ID
+    char gt[10];         // Gender
+    Date ns;             // Date of birth
+    double gpa;          // GPA score (0.0 – 4.0)
 } SinhVien;
 ```
 
+> ℹ️ Field names (`ten`, `lop`, `maSV`, `gt`, `ns`, `gpa`) are kept as-is in the source code (Vietnamese abbreviations) to match the actual implementation. Their English equivalents are: `name`, `class`, `student ID`, `gender`, `date of birth`, `GPA`.
+
 ---
 
-## ⚙️ Yêu cầu hệ thống
+## ⚙️ System Requirements
 
-| Yêu cầu | Chi tiết |
+| Requirement | Details |
 |---|---|
-| Hệ điều hành | Windows (dùng `windows.h` để hỗ trợ UTF-8) |
-| Compiler | GCC (MinGW) hoặc MSVC |
-| Chuẩn C | C99 trở lên |
+| Operating System | Windows (uses `windows.h` for UTF-8 console support) |
+| Compiler | GCC (MinGW) or MSVC |
+| C Standard | C99 or later |
+
+> ⚠️ On Linux/macOS, the `windows.h` includes and any UTF-8 console setup calls must be removed or wrapped in `#ifdef _WIN32 ... #endif` for the program to compile.
 
 ---
 
-## 🔨 Cách biên dịch
+## 🚀 Installation & Build
+
+### 1. Clone the repository
+
+```bash
+git clone https://github.com/<username>/<repo-name>.git
+cd <repo-name>
+```
+
+### 2. Compile with GCC
 
 ```bash
 gcc main.c nhap_in.c sapxep.c file.c -o sinhvien -lm
 ```
 
-Hoặc nếu dùng Code::Blocks / Dev-C++: thêm tất cả file `.c` vào project rồi Build & Run.
+Alternatively, if using **Code::Blocks** or **Dev-C++**: add all `.c` files to the project, then **Build & Run**.
 
----
-
-## 🚀 Cách chạy
+### 3. Run the program
 
 ```bash
 ./sinhvien
 ```
 
-Chương trình sẽ hiển thị menu:
+---
+
+## 📖 Usage Guide
+
+When launched, the program displays the main menu:
 
 ```
 ╔══════════════════════════════════╗
 ║              MENU                ║
 ║══════════════════════════════════║
-║  1. Nhap thong tin sinh vien     ║
-║  2. Hien thi thong tin sinh vien ║
-║  3. Tim GPA cao nhat             ║
-║  4. Sap xep                      ║
-║  5. Them sinh vien               ║
-║  6. Xoa sinh vien                ║
-║  7. Tim kiem sinh vien           ║
-║  8. Tim sinh vien theo ma SV     ║
-║  9. Xoa sinh vien theo ma SV     ║
-║ 10. Sua thong tin Sv             ║
-║ 11. Luu file                     ║
-║ 12. Doc file                     ║
-║  0. Thoat                        ║
+║  1. Enter student information    ║
+║  2. Display student list         ║
+║  3. Find highest GPA              ║
+║  4. Sort students                 ║
+║  5. Add a student                 ║
+║  6. Delete a student              ║
+║  7. Search for a student          ║
+║  8. Search by student ID          ║
+║  9. Delete by student ID          ║
+║ 10. Edit student information      ║
+║ 11. Save to file                  ║
+║ 12. Load from file                ║
+║  0. Exit                          ║
 ╚══════════════════════════════════╝
 ```
 
----
-
-## 📋 Chức năng
-
-| Lựa chọn | Chức năng | Mô tả |
-|---|---|---|
-| 1 | Nhập danh sách | Nhập N sinh viên liên tiếp |
-| 2 | Hiển thị danh sách | In bảng toàn bộ sinh viên |
-| 3 | Tìm GPA cao nhất | Hiển thị sinh viên có GPA cao nhất |
-| 4 | Sắp xếp | Sắp xếp theo GPA tăng dần (Bubble Sort) |
-| 5 | Thêm sinh viên | Thêm một sinh viên vào cuối danh sách |
-| 6 | Xóa theo STT | Xóa sinh viên theo số thứ tự hiển thị |
-| 7 | Tìm theo tên | Tìm kiếm sinh viên theo họ tên đầy đủ |
-| 8 | Tìm theo mã SV | Tìm kiếm sinh viên theo mã số |
-| 9 | Xóa theo mã SV | Xóa sinh viên theo mã số |
-| 10 | Sửa thông tin | Cập nhật toàn bộ thông tin theo mã SV |
-| 11 | Lưu file | Ghi danh sách ra `SinhVien.txt` |
-| 12 | Đọc file | Nạp danh sách từ `SinhVien.txt` |
-| 0 | Thoát | Kết thúc chương trình |
+Select an option by entering its corresponding number, then follow the on-screen prompts.
 
 ---
 
-## 💾 Định dạng file lưu trữ
+## 💾 Storage File Format
 
-Dữ liệu được lưu vào file `SinhVien.txt` theo định dạng plaintext:
+Data is saved to `SinhVien.txt` as plain text, in the following format:
 
 ```
-<số lượng sinh viên>
-<maSV>
-<họ tên>
-<lớp>
-<giới tính>
-<ngày> <tháng> <năm>
+<number of students>
+<student ID>
+<full name>
+<class>
+<gender>
+<day> <month> <year>
 <GPA>
 ...
 ```
 
-Ví dụ:
+**Example:**
 
 ```
 2
@@ -141,15 +181,68 @@ Nu
 
 ---
 
-## ⚠️ Lưu ý
+## 🔄 Program Flow Diagram
 
-- Chương trình lưu tối đa **100 sinh viên** trong bộ nhớ.
-- GPA hợp lệ trong khoảng **0.0 đến 4.0**, chương trình sẽ yêu cầu nhập lại nếu sai.
-- Khi tìm theo tên, cần nhập **chính xác** họ tên đầy đủ (phân biệt hoa/thường).
-- File `SinhVien.txt` được tạo tự động khi chọn **Lưu file**.
+```
+┌─────────────┐
+│   main()    │
+└──────┬──────┘
+       │
+       ▼
+┌─────────────────────┐
+│  Display menu (0-12) │◄──────────────┐
+└──────┬───────────────┘               │
+       │                                │
+       ▼                                │
+┌─────────────────────┐                │
+│ Read user choice     │                │
+└──────┬───────────────┘                │
+       │                                │
+       ▼                                │
+┌──────────────────────────────┐        │
+│ switch(choice)                 │        │
+│  ├─ 1,5,9,10  → nhap_in.c      │        │
+│  ├─ 2,6,7,8   → nhap_in.c      │        │
+│  ├─ 3,4       → sapxep.c       │        │
+│  ├─ 11,12     → file.c         │        │
+│  └─ 0         → Exit           │        │
+└──────┬───────────────────────────┘       │
+       │ (operation complete)              │
+       ▼                                    │
+┌──────────────────────┐                    │
+│ Return to main menu   │────────────────────┘
+└──────────────────────┘
+```
 
 ---
 
-## 👤 Tác giả
+## ⚠️ Notes & Limitations
 
-> Bài tập lập trình C — Sinh viên năm 2
+- The program stores a maximum of **100 students** in memory.
+- Valid GPA range is **0.0 to 4.0** — the program will prompt for re-entry if an invalid value is given.
+- Searching by name requires the **exact full name**, including correct case (case-sensitive).
+- The `SinhVien.txt` file is created automatically when **Save to file** is selected.
+- The internal struct field names (`ten`, `lop`, `maSV`, etc.) remain in Vietnamese to match the source code; see [Data Structure](#️-data-structure) for their English meanings.
+
+---
+
+## 🔮 Roadmap
+
+- [ ] Replace fixed-size array (max 100 students) with dynamic memory allocation
+- [ ] Add case-insensitive and partial-match search by name
+- [ ] Add sorting by additional fields (name, class, date of birth)
+- [ ] Add input validation for student ID format and date of birth
+- [ ] Add cross-platform support (Linux/macOS) via `#ifdef`
+- [ ] Export student list to CSV format
+
+---
+
+## 👤 Author
+
+> C programming assignment — 2nd-year student project.
+
+---
+
+## 📄 License
+
+This project is released under the **MIT License** — free to use, modify, and distribute for educational and non-commercial purposes.
